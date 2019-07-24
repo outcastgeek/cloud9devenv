@@ -1,27 +1,36 @@
-data "aws_vpc" "selected" {
-  tags {
-    Name = "${var.vpc}"
+resource "aws_default_vpc" "cloud9devenv_vpc" {
+
+  tags = {
+    Name = "Cloud9DevEnv Default VPC"
   }
 }
 
-data "aws_subnet_ids" "selected" {
-  vpc_id = "${data.aws_vpc.selected.id}"
+resource "aws_subnet" "cloud9devenv_sub" {
+  vpc_id = "${aws_default_vpc.cloud9devenv_vpc.id}"
+  availability_zone = "${var.aws_region}a"
 
-  tags {
-    Tier = "${var.tier}"
+  cidr_block = "172.31.0.0/24"
+
+  tags = {
+    Description = "Cloud9DevEnv subnet for ${var.aws_region}a"
   }
 }
 
 locals {
-  subnet_id = "${data.aws_subnet_ids.selected.ids[0]}"
+  subnet_id = "${aws_subnet.cloud9devenv_sub.id}"
 }
+
+#data "aws_canonical_user_id" "current" {}
+
+data "aws_caller_identity" "current" {}
 
 resource "aws_cloud9_environment_ec2" "default" {
   name                        = "${var.name}"
   instance_type               = "${var.instance_type}"
   automatic_stop_time_minutes = "${var.automatic_stop_time_minutes}"
   description                 = "${var.description}"
-  owner_arn                   = "${var.owner_arn}"
   subnet_id                   = "${local.subnet_id}"
+  #owner_arn                   = "${data.aws_canonical_user_id.current.id}"
+  owner_arn                   = "${data.aws_caller_identity.current.arn}"
 }
 

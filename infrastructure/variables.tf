@@ -1,5 +1,12 @@
+# Multiple Regions: us-east-1 sa-east-1 eu-central-1 cn-north-1 ap-northeast-1 ap-southeast-2
+variable "aws_region" {
+  description = "AWS region"
+  default     = "us-east-1"
+}
+
 variable "name" {
-  description = "Cloud9 DEV Environment"
+  description = "The name of the environment"
+  default = "Cloud9DevEnv"
 }
 
 variable "instance_type" {
@@ -14,18 +21,6 @@ variable "automatic_stop_time_minutes" {
 
 variable "description" {
   description = "The description of the environment"
-}
-
-variable "owner_arn" {
-  description = "The ARN of the environment owner"
-}
-
-variable "vpc" {
-  description = "VPC in which EC2 instance is to be placed"
-}
-
-variable "tier" {
-  description = "Network tier in which to place EC2 instance"
-  default     = "public"
+  default = "Cloud9 DEV Environment"
 }
 
