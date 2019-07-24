@@ -1,0 +1,8 @@
+pipeline:
+    build:
+        image: hashicorp/terraform:light
+        commands:
+            - terraform version
+            - terraform validate -check-variables="false" $(pwd)/infrastructure
+            - terraform fmt -check=true $(pwd)/infrastructure
+
