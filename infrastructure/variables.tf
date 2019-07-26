@@ -24,3 +24,8 @@ variable "description" {
   default = "Cloud9 DEV Environment"
 }
 
+variable "volume_size" {
+  description = "The Size of the EBS Volume"
+  default = 80
+}
+
